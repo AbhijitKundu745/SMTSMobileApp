@@ -1,0 +1,114 @@
+/PDA/InsertInventoryData : POST
+
+REQUEST:
+
+{
+	"Count": 2,
+	"ClientDeviceID": "12wew",
+	"LocationID": 12,
+	"DateTime": "1970-01-01 00:00:00",
+	"data": ["E20034111111111111111111", "E2000341aaaaaaaaaaaaaaaaa"]
+}
+
+
+RESPONSE:
+1) positive
+{
+	"status": "true",
+	"message": null
+}
+
+2) Negative
+
+{
+	"status": "false",
+	"message": "Device not registered"//respective message
+}
+
+ABOVE API Change
+/PDA/InsertInventoryData :POST
+NEW REQUEST:
+{
+	"Count": 2,
+	"ClientDeviceID": "12wew",
+	"LocationID": 12,
+	"DateTime": "1970-01-01 00:00:00",
+	"data": [{
+		"epc": "E20034111111111111111111",
+		"status": "processed",
+		"assetId": 123,
+		"assetName": "abcd"
+
+	}, {
+		"epc": "E2000341aaaaaaaaaaaaaaaaa",
+		"status": "unprocessed",
+		"assetId": 1234,
+		"assetName": "abcdpqr"
+	}]
+}
+
+NEW RESPONSE:
+1) positive
+{
+	"status": "true",
+	"message": null
+}
+
+2) Negative
+
+{
+	"status": "false",
+	"message": "Device not registered"//respective message
+}
+
+***************************************************************************
+
+new API for get status: /PDA/GetInventoryDataStatus : POST
+
+REQUEST:
+{
+	"Count": 2,
+	"ClientDeviceID": "12wew",
+	"LocationID": 12,
+	"DateTime": "1970-01-01 00:00:00",
+	"data": [{
+		"epc": "E20034111111111111111111"
+
+	}, {
+		"epc": "E2000341aaaaaaaaaaaaaaaaa"
+
+	}]
+}
+
+RESPONSE:
+1) POSITIVE
+{
+	"status": "true",
+	"message": null,
+	"data": {
+		"Count": 2,
+		"ClientDeviceID": "12wew",
+		"LocationID": 12,
+		"DateTime": "1970-01-01 00:00:00",
+		"data": [{
+			"epc": "E20034111111111111111111",
+			"status": "processed",
+			"assetId": 12344,
+			"assetName": "abcd"
+		}, {
+			"epc": "E2000341aaaaaaaaaaaaaaaaa",
+			"status": "unprocessed",
+			"assetId": 1234455,
+			"assetName": "abcdpqr"
+		}]
+	}
+}
+
+
+2) Negative
+
+{
+	"status": "false",
+	"message": "respective error message"
+	"data":null
+}

@@ -1,0 +1,34 @@
+(09-MAY-2023)
+SMTS APP : UHF Initialization on Resume
+
+___________________________________________________
+ SMTS APP : V1.2 Release (09-May-2023)
+	Release Notes:
+	1) Lock Unlock Location for Inout Module already working. Tested and is OK.
+	2) If RFID have asset name available in DB then asset name will display else UNKNOWN will get display.
+
+_____________________________________________________________
+
+SMTS APP : V1.3 Release (22-May-2023)
+	Release Notes:
+	1) Auoclave locations api call before starting IN-OUT module
+
+_____________________________________________________________________
+
+SMTS APP : V1.4 Release (02-June-2023)
+    	Release Notes:
+    	1) Kit Data upload Module, get Status before uploading data
+
+    	commit id :7314f16015a4d71ac87c5cca98106192ae4ae7ce
+
+________________________________________________________________________
+
+
+SMTS APP : V1.5 Release (11-June-2023)
+    	Release Notes:
+    	1) Kit Data upload Module, get Status before uploading data : Integration with NEW API
+
+
+    commit id :84067a4e481f4f059d5187ef0d5ca83037812296
+
+________________________________________________________________________

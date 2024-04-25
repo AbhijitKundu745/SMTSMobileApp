@@ -1,0 +1,102 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/textClose"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:gravity="center|right"
+        android:layout_marginTop="10dp"
+        android:textColor="@color/red"
+        android:textSize="20sp"
+        android:layout_marginRight="10dp"
+        android:text="Close"
+        />
+
+    <TextView
+        android:id="@+id/image_dialog"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_below="@+id/textClose"
+        android:layout_marginTop="10dp"
+        android:gravity="center"
+        android:text="Select RF Power"
+        android:textColor="@color/black"
+        android:textSize="20sp" />
+    <ImageView
+        android:id="@+id/img"
+        android:layout_width="50dp"
+        android:layout_centerHorizontal="true"
+        android:layout_height="50dp"
+        android:layout_below="@+id/image_dialog"
+        android:gravity="center"
+        android:layout_marginTop="10dp"
+        android:src="@drawable/success"
+
+        />
+
+    <TextView
+        android:id="@+id/tip"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_below="@+id/img"
+        android:layout_marginTop="10dp"
+        android:gravity="center"
+        android:textStyle="bold"
+        android:textSize="18sp"
+        android:text="Current Mode:"
+        android:textColor="@color/green" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:orientation="horizontal"
+        android:layout_below="@+id/tip"
+        android:layout_marginTop="30dp"
+        android:layout_marginBottom="20dp"
+        android:gravity="center"
+        android:layout_centerHorizontal="true"
+        android:layout_height="40dp">
+        <Button
+            android:id="@+id/btnHigh"
+            android:layout_width="100dp"
+            android:layout_height="50dp"
+            android:textAllCaps="false"
+            android:layout_centerHorizontal="true"
+            android:background="@drawable/round_button_green"
+            android:layout_marginRight="5dp"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:text="High"
+            android:textColor="#ffffffff" />
+        <Button
+            android:id="@+id/btnMedium"
+            android:layout_width="100dp"
+            android:layout_height="50dp"
+            android:layout_centerHorizontal="true"
+            android:layout_marginLeft="5dp"
+            android:textAllCaps="false"
+            android:background="@drawable/round_button_red"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:text="Medium"
+            android:textColor="#ffffffff" />
+
+        <Button
+            android:id="@+id/btnLow"
+            android:layout_width="100dp"
+            android:layout_height="50dp"
+            android:layout_centerHorizontal="true"
+            android:layout_marginLeft="5dp"
+            android:textAllCaps="false"
+            android:background="@drawable/round_button_red"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:text="Low"
+            android:textColor="#ffffffff" />
+    </LinearLayout>
+
+
+
+</RelativeLayout>

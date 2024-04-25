@@ -1,0 +1,37 @@
+METHOD : /PDA/GetKitOutLifeStatus
+METHOD TYPE : POST
+
+REQUEST:
+
+{
+	"ReaderIP": "10.0.0.2",
+	"AntenaID": "1",
+	"RSSI": 1,
+	"TagId": "AAAAAAAAAAAAAAAAAAAAAAAA",
+	"SerialNO": "12345678",
+	"TagType": "12",
+	"TransDateTime": "1970-01-01 00:00:00"
+
+}
+
+RESPONSE:
+1) SUCCESS:
+
+{
+	"status": true,
+	"message": "",
+	"data": {
+		"KitOutLifeStatus": "OK",
+		"OutLife": "111.10"
+	}
+
+}
+
+2) ERROR:
+
+{
+	"status": false,
+	"message": "respective error message",
+	"data": null
+
+}

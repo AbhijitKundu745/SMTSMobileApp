@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.appcompat.widget.LinearLayoutCompat
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_marginLeft="10dp"
+    android:layout_marginRight="10dp"
+    android:layout_height="40dp">
+    <TextView
+        android:id="@+id/textId"
+        android:layout_width="0dp"
+        android:layout_weight="0.2"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:textColor="@color/white"
+        android:textStyle="bold"
+        android:layout_height="match_parent"
+        android:text="SR NO."/>
+    <View
+        android:layout_width="1dp"
+        android:layout_height="match_parent"
+        android:background="@color/black"/>
+    <TextView
+        android:id="@+id/textKitId"
+        android:layout_width="0dp"
+        android:layout_weight="0.8"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:textColor="@color/white"
+        android:textStyle="bold"
+        android:layout_height="match_parent"
+        android:text="KIT NAME"/>
+    <View
+        android:layout_width="1dp"
+        android:layout_height="match_parent"
+        android:background="@color/black"/>
+    <ImageView
+        android:id="@+id/imgStatus"
+        android:layout_width="40dp"
+        android:layout_gravity="center_vertical"
+        android:gravity="center_vertical"
+        android:layout_height="40dp"
+        android:src="@drawable/error"
+        />
+</androidx.appcompat.widget.LinearLayoutCompat>

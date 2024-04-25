@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+    </data>
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        tools:context=".KitOutLifeActivity">
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="55dp"
+            android:scaleType="fitXY"
+            android:src="@drawable/banner"/>
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:orientation="vertical"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:background="@color/backgroundcolor"
+            android:layout_weight="1">
+            <androidx.appcompat.widget.AppCompatTextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginRight="10dp"
+                android:textStyle="bold"
+                android:textSize="20sp"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:textColor="@color/white"
+                android:text="Kit Out Life"/>
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="10dp"
+                android:textColor="@color/white"
+                android:text="Kit ID"/>
+            <androidx.appcompat.widget.LinearLayoutCompat
+                android:layout_width="match_parent"
+                android:orientation="horizontal"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_height="wrap_content">
+                <EditText
+                    android:id="@+id/edtKitId"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="50dp"
+                    android:paddingLeft="10dp"
+                    android:singleLine="true"
+                    android:enabled="false"
+                    android:editable="false"
+                    android:maxLines="1"
+                    android:maxLength="25"
+                    android:background="@drawable/edit_text_background"/>
+            </androidx.appcompat.widget.LinearLayoutCompat>
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="10dp"
+                android:textColor="@color/white"
+                android:text="Out Life Status"/>
+            <androidx.appcompat.widget.LinearLayoutCompat
+                android:layout_width="match_parent"
+                android:orientation="horizontal"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_height="wrap_content">
+                <EditText
+                    android:id="@+id/edtOutLifeStatus"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="50dp"
+                    android:paddingLeft="10dp"
+                    android:singleLine="true"
+                    android:enabled="false"
+                    android:editable="false"
+                    android:maxLines="1"
+                    android:maxLength="25"
+                    android:background="@drawable/edit_text_background"/>
+            </androidx.appcompat.widget.LinearLayoutCompat>
+
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="10dp"
+                android:textColor="@color/white"
+                android:text="Kit Out Life"/>
+            <androidx.appcompat.widget.LinearLayoutCompat
+                android:layout_width="match_parent"
+                android:orientation="horizontal"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_height="wrap_content">
+                <EditText
+                    android:id="@+id/edtKitOutLife"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="50dp"
+                    android:paddingLeft="10dp"
+                    android:singleLine="true"
+                    android:enabled="false"
+                    android:editable="false"
+                    android:maxLines="1"
+                    android:maxLength="25"
+                    android:background="@drawable/edit_text_background"/>
+            </androidx.appcompat.widget.LinearLayoutCompat>
+
+
+
+
+            <androidx.appcompat.widget.LinearLayoutCompat
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="20dp"
+                android:layout_gravity="bottom"
+                android:gravity="bottom"
+                android:orientation="horizontal">
+                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/btnSave"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="40dp"
+                    android:textAllCaps="false"
+                    android:textStyle="bold"
+                    android:textColor="@color/white"
+                    android:background="@drawable/round_button_green"
+                    android:text="Save"/>
+                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/btnClear"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="40dp"
+                    android:textAllCaps="false"
+                    android:layout_marginLeft="5dp"
+                    android:textStyle="bold"
+                    android:textColor="@color/white"
+                    android:background="@drawable/round_button_red"
+                    android:text="Clear"/>
+            </androidx.appcompat.widget.LinearLayoutCompat>
+            <ImageView
+                android:id="@+id/imgSyncLocations"
+                android:layout_width="50dp"
+                android:layout_marginTop="30dp"
+                android:layout_gravity="center"
+                android:layout_height="50dp"
+                android:visibility="invisible"
+                android:src="@drawable/sync"/>
+
+        </androidx.appcompat.widget.LinearLayoutCompat>
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:gravity="center"
+            android:paddingBottom="5dp"
+            android:paddingTop="5dp"
+            android:textColor="@color/footercolor"
+            android:text="@string/footer"/>
+    </androidx.appcompat.widget.LinearLayoutCompat>
+</layout>

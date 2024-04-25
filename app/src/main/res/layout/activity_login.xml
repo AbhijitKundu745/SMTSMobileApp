@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+    <data>
+
+    </data>
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        tools:context=".LoginActivity">
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="55dp"
+            android:scaleType="fitXY"
+            android:src="@drawable/banner"/>
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:padding="10dp"
+            android:background="@color/backgroundcolor"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:orientation="vertical">
+            <androidx.appcompat.widget.LinearLayoutCompat
+                android:layout_width="match_parent"
+                android:orientation="horizontal"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:layout_height="80dp">
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:id="@+id/imgDummy"
+                    android:layout_width="50dp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_height="50dp" />
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:id="@+id/imgUser"
+                    android:layout_weight="1"
+                    android:layout_width="80dp"
+                    android:layout_height="80dp"
+                    android:src="@drawable/user"/>
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:id="@+id/imgSetting"
+                    android:layout_width="50dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_height="50dp"
+                    android:src="@drawable/setting"/>
+            </androidx.appcompat.widget.LinearLayoutCompat>
+
+            <!--<androidx.appcompat.widget.AppCompatEditText
+                android:id="@+id/edtUserName"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:paddingLeft="10dp"
+                android:layout_marginTop="10dp"
+                android:inputType="text"
+                android:maxLength="20"
+                android:singleLine="true"
+                android:background="@drawable/edit_text_background"
+                android:hint="Username"/>
+            <androidx.appcompat.widget.AppCompatEditText
+                android:id="@+id/edtPassword"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginTop="10dp"
+                android:paddingLeft="10dp"
+                android:inputType="textPassword"
+                android:maxLength="20"
+                android:singleLine="true"
+                android:background="@drawable/edit_text_background"
+                android:hint="Password"/>-->
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:layout_marginBottom="5dp"
+                android:layout_marginTop="5dp"
+                android:background="@drawable/edittext_white_background">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/edtUserName"
+                    android:layout_width="match_parent"
+                    android:background="@drawable/edittext_white_background"
+                    android:drawableRight="@drawable/ic_user"
+                    android:layout_height="60dp"
+                    android:inputType="text"
+                    android:maxLength="50"
+                    android:letterSpacing="0.1"
+                    android:textSize="20sp"
+                    android:hint="Username"
+                    android:paddingLeft="5dp" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:layout_marginTop="5dp"
+                app:passwordToggleEnabled="true"
+                android:background="@drawable/edittext_white_background"
+                android:drawableRight="@android:drawable/ic_menu_info_details">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/edtPassword"
+                    android:layout_width="match_parent"
+                    android:layout_height="60dp"
+                    android:background="@drawable/edittext_white_background"
+                    android:hint="Password"
+                    android:inputType="textPassword"
+                    android:letterSpacing="0.2"
+                    android:maxLength="50"
+                    android:paddingLeft="5dp"
+                    android:textSize="20sp" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+
+            <androidx.appcompat.widget.AppCompatCheckBox
+                android:id="@+id/chkRemember"
+                android:layout_marginTop="10dp"
+                android:layout_width="match_parent"
+                android:text="Remember Me"
+                android:layout_height="wrap_content"/>
+
+            <androidx.appcompat.widget.LinearLayoutCompat
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginTop="10dp"
+                android:orientation="horizontal">
+                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/btnLogin"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="40dp"
+                    android:background="@drawable/round_button_green"
+                    android:text="Login"/>
+                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/btnClear"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="40dp"
+                    android:layout_marginLeft="5dp"
+                    android:background="@drawable/round_button_red"
+                    android:text="Clear"/>
+            </androidx.appcompat.widget.LinearLayoutCompat>
+            <TextView
+                android:id="@+id/textDeviceId"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:textColor="@color/white"
+                android:layout_marginBottom="10dp"
+                android:text="Device ID: " />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:textColor="@color/white"
+                android:layout_marginBottom="10dp"
+                android:text="Version: 1.5" />
+        </androidx.appcompat.widget.LinearLayoutCompat>
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:gravity="center"
+            android:paddingBottom="5dp"
+            android:paddingTop="5dp"
+            android:textColor="@color/footercolor"
+            android:text="@string/footer"/>
+    </androidx.appcompat.widget.LinearLayoutCompat>
+</layout>
