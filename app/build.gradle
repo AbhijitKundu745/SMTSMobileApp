@@ -10,7 +10,7 @@ android {
         minSdk 21
         targetSdk 32
         versionCode 6
-        versionName "1.5"
+        versionName "1.5.1"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -54,7 +54,7 @@ dependencies {
     implementation 'commons-codec:commons-codec:1.10'
 
     //searchable spinner
-    implementation 'gr.escsoft.michaelprimez.searchablespinner:SearchableSpinner:1.0.9'
+    implementation 'com.github.michaelprimez:searchablespinner:1.0.9'
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.4'
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.0'
 }

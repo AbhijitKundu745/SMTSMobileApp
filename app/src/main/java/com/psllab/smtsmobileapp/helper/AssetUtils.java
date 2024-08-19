@@ -677,8 +677,8 @@ public class AssetUtils {
             tip.setText("Current  RF Power : LOW");
             img.setImageDrawable(context.getResources().getDrawable(R.drawable.success));
         }else{
-            tip.setTextColor(context.getResources().getColor(R.color.green));
-            tip.setText("Current  RF Power : HIGH");
+            tip.setTextColor(context.getResources().getColor(R.color.red));
+            tip.setText("Current  RF Power : LOW");
             img.setImageDrawable(context.getResources().getDrawable(R.drawable.success));
         }
 

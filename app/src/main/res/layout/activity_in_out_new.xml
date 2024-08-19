@@ -133,7 +133,8 @@
                 android:background="@color/light_blue"
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"
-                android:layout_weight="1"></ListView>
+                android:layout_weight="1">
+            </ListView>
             <androidx.appcompat.widget.LinearLayoutCompat
                 android:layout_width="match_parent"
                 android:orientation="vertical"

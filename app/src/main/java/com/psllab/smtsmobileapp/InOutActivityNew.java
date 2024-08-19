@@ -85,21 +85,25 @@ public class InOutActivityNew extends AppCompatActivity implements AdapterView.O
         epcList = new ArrayList<>();
         enableSpinner();
         binding.spLocation.setEnabled(false);
-        binding.list.setVisibility(View.GONE);
+        //binding.list.setVisibility(View.GONE);
         getAllLocations();
         binding.spLocation.setOnItemSelectedListener(this);
         sources = db.getAllLocationsForSearchSpinner();
         sources.add(0,default_location);
 
+        SharedPreferencesManager.setPower(context, 10);
         ArrayAdapter aa = new ArrayAdapter(this, android.R.layout.simple_spinner_item, sources);
         aa.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         //Setting the ArrayAdapter data on the Spinner
         binding.spLocation.setAdapter(aa);
+        InOutadapter = new InOutAdapter(context, tagList);
+        binding.list.setAdapter(InOutadapter);
+        InOutadapter.notifyDataSetChanged();
 
         binding.btnSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (epcList.size() > 0) {
+                if (tagList.size() > 0) {
                         showCustomConfirmationDialog("Are you sure you want to upload", "UPLOAD");
                 }
 
@@ -138,7 +142,7 @@ public class InOutActivityNew extends AppCompatActivity implements AdapterView.O
             }
         });
 
-        SharedPreferencesManager.setPower(context, 30);
+        //SharedPreferencesManager.setPower(context, 30);
         binding.textTotalScanned.setText("0");
 
         beepTimer = new Timer();
@@ -231,8 +235,7 @@ public class InOutActivityNew extends AppCompatActivity implements AdapterView.O
         });
 
 
-        InOutadapter = new InOutAdapter(context, tagList);
-        binding.list.setAdapter(InOutadapter);
+
     }
 
     @Override
@@ -251,6 +254,7 @@ public class InOutActivityNew extends AppCompatActivity implements AdapterView.O
     }
     private void doDataValidations(String epc) {
         if (!this.epcList.contains(epc)) {
+            Log.e("Here1", db.getAssetNameByTagId(epc));
             if(!db.getAssetNameByTagId(epc).equalsIgnoreCase(AppConstants.UNKNOWN_ASSET)){
                 valid_speed++;
                 epcList.add(epc);
@@ -431,10 +435,14 @@ public class InOutActivityNew extends AppCompatActivity implements AdapterView.O
         if (arrayList != null) {
             arrayList.clear();
         }
+        if(tagList!= null){
+            tagList.clear();
+        }
+        InOutadapter.notifyDataSetChanged();
         enableSpinner();
         binding.spLocation.setEnabled(false);
 
-        binding.list.setVisibility(View.GONE);
+        //binding.list.setVisibility(View.GONE);
         binding.textTotalScanned.setText("0");
         binding.spLocation.setSelection(0);
     }

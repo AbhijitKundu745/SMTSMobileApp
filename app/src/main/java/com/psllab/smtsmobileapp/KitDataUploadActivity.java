@@ -90,7 +90,7 @@ public class KitDataUploadActivity extends AppCompatActivity implements AdapterV
         enableSpinner();
         binding.spLocation.setEnabled(false);
 
-        binding.list.setVisibility(View.GONE);
+        //binding.list.setVisibility(View.GONE);
         binding.spLocation.setOnItemSelectedListener(this);
         //Creating the ArrayAdapter instance having the country list
         sources = db.getAllAutoclaveLocationsForSearchSpinner();
@@ -100,7 +100,7 @@ public class KitDataUploadActivity extends AppCompatActivity implements AdapterV
         ArrayAdapter aa = new ArrayAdapter(this, android.R.layout.simple_spinner_item, sources);
         aa.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         binding.spLocation.setAdapter(aa);
-
+        SharedPreferencesManager.setPower(context, 10);
         binding.btnSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -154,10 +154,11 @@ public class KitDataUploadActivity extends AppCompatActivity implements AdapterV
             }
         });
 
-        SharedPreferencesManager.setPower(context, 30);
+
 
         adapter = new InventoryAdapter(context, tagList);
         binding.list.setAdapter(adapter);
+        adapter.notifyDataSetChanged();
         binding.textTotalScanned.setText("Total Kit ID's : 0");
 //        binding.textProcessed.setText("Processed : 0");
 //        binding.textUnprocessed.setText("Unprocessed : 0");
@@ -468,16 +469,20 @@ public class KitDataUploadActivity extends AppCompatActivity implements AdapterV
         if (epcList != null) {
             epcList.clear();
         }
-        ArrayList<HashMap<String, String>> arrayList = tagList;
+        ArrayList<HashMap<String, String>> arrayList = this.tagList;
         if (arrayList != null) {
             arrayList.clear();
         }
+        if(tagList!= null){
+            tagList.clear();
+        }
+        adapter.notifyDataSetChanged();
         //binding.btnSave.setText("Get Status");
         isStatusRetrieved = false;
         enableSpinner();
         binding.spLocation.setEnabled(false);
 
-        binding.list.setVisibility(View.GONE);
+        //binding.list.setVisibility(View.GONE);
         binding.textTotalScanned.setText("Total Kit ID's : 0");
         binding.spLocation.setSelection(0);
     }

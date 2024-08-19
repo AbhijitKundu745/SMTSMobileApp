@@ -117,7 +117,7 @@ public class DashboardActivity extends AppCompatActivity {
             @Override
             public void run() {
                 getAssets(APIConstants.M_GET_ASSETS, "GETTING ASSETS");
-                workOrderPollingApiHandler.postDelayed(this, 10000);
+                workOrderPollingApiHandler.postDelayed(this, 5000);
             }
         };
         workOrderPollingApiHandler.postDelayed(workOrderPollingApiRunnable, 2000);
