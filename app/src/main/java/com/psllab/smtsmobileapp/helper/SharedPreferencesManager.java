@@ -35,7 +35,7 @@ public class SharedPreferencesManager {
 
 
     public static int getPower(Context context) {
-        return getSharedPreferences(context).getInt(SAVED_POWER, 30);
+        return getSharedPreferences(context).getInt(SAVED_POWER, 20);
     }
 
     public static void setPower(Context context, int newValue) {

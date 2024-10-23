@@ -34,6 +34,7 @@ import com.psllab.smtsmobileapp.helper.AppConstants;
 import com.psllab.smtsmobileapp.helper.AssetUtils;
 import com.psllab.smtsmobileapp.helper.ConnectionDetector;
 import com.psllab.smtsmobileapp.helper.SharedPreferencesManager;
+import com.psllab.smtsmobileapp.rfid.BaseUhfActivity;
 import com.psllab.smtsmobileapp.rfid.RFIDInterface;
 import com.psllab.smtsmobileapp.rfid.SeuicGlobalRfidHandler;
 import com.seuic.uhf.EPC;
@@ -51,7 +52,7 @@ import java.util.concurrent.TimeUnit;
 
 import okhttp3.OkHttpClient;
 
-public class KitDataUploadActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
+public class KitDataUploadActivity extends BaseUhfActivity implements AdapterView.OnItemSelectedListener {
     List<String> epcList;
 
     Dialog customConfirmationDialog;
@@ -100,7 +101,7 @@ public class KitDataUploadActivity extends AppCompatActivity implements AdapterV
         ArrayAdapter aa = new ArrayAdapter(this, android.R.layout.simple_spinner_item, sources);
         aa.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         binding.spLocation.setAdapter(aa);
-        SharedPreferencesManager.setPower(context, 10);
+        SharedPreferencesManager.setPower(context, 20);
         binding.btnSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -123,8 +124,10 @@ public class KitDataUploadActivity extends AppCompatActivity implements AdapterV
         binding.btnPower.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                SharedPreferencesManager.setPower(context, 20);
                 if (allow_trigger_to_press) {
-                    AssetUtils.openPowerSettingDialog(context, rfidHandler);
+                    //AssetUtils.openPowerSettingDialog(context, rfidHandler);
+                    openPowerSettingDialog(context);
                 }
             }
         });
