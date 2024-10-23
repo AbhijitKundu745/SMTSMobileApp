@@ -22,6 +22,7 @@ public class SharedPreferencesManager {
     private static final String CURRENT_ACCESS_PASSWORD = "CURRENT_ACCESS_PASSWORD";
     private static final String DEVICE_ID = "DEVICE_ID";
     private static final String SAVED_POWER = "POWER";
+    private static final String SAVED_POWER_TEXT = "POWER_TEXT";
 
     private SharedPreferencesManager() {}
 
@@ -35,7 +36,7 @@ public class SharedPreferencesManager {
 
 
     public static int getPower(Context context) {
-        return getSharedPreferences(context).getInt(SAVED_POWER, 20);
+        return getSharedPreferences(context).getInt(SAVED_POWER, 30);
     }
 
     public static void setPower(Context context, int newValue) {
@@ -160,6 +161,16 @@ public class SharedPreferencesManager {
     public static void setAssetMasterLastSyncDate(Context context, String newValue) {
         final SharedPreferences.Editor editor = getSharedPreferences(context).edit();
         editor.putString(ASSET_MASTER_LAST_SYNC_DATE, newValue);
+        editor.commit();
+    }
+    public static String getPowerText(Context context) {
+        return getSharedPreferences(context).getString(SAVED_POWER_TEXT, "LOW");
+    }
+
+    public static void setPowerText(Context context, String newValue) {
+
+        final SharedPreferences.Editor editor = getSharedPreferences(context).edit();
+        editor.putString(SAVED_POWER_TEXT, newValue);
         editor.commit();
     }
 

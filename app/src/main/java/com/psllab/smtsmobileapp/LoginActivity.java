@@ -234,7 +234,7 @@ public class LoginActivity extends AppCompatActivity {
 
                                 } else {
                                     //dummyLogin();
-                                    AssetUtils.showCommonBottomSheetErrorDialog(context, message);
+                                    AssetUtils.showCommonBottomSheetErrorDialog(context, "Please check credentials");
                                 }
                             } catch (JSONException e) {
                                 hideProgressDialog();

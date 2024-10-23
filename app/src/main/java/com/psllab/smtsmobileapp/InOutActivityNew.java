@@ -92,7 +92,8 @@ public class InOutActivityNew extends BaseUhfActivity implements AdapterView.OnI
         sources = db.getAllLocationsForSearchSpinner();
         sources.add(0,default_location);
 
-        SharedPreferencesManager.setPower(context, 20);
+        SharedPreferencesManager.setPower(context, 30);
+        SharedPreferencesManager.setPowerText(context, "LOW");
         ArrayAdapter aa = new ArrayAdapter(this, android.R.layout.simple_spinner_item, sources);
         aa.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         //Setting the ArrayAdapter data on the Spinner
@@ -114,10 +115,9 @@ public class InOutActivityNew extends BaseUhfActivity implements AdapterView.OnI
         binding.btnPower.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                SharedPreferencesManager.setPower(context, 20);
                 if (allow_trigger_to_press) {
-                    //AssetUtils.openPowerSettingDialog(context, rfidHandler);
-                    openPowerSettingDialog(context);
+                    AssetUtils.openPowerSettingDialog(context, rfidHandler);
+                    //openPowerSettingDialog(context);
                 }
             }
         });

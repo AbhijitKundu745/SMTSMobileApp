@@ -637,11 +637,10 @@ public class AssetUtils {
     }
 
     static Dialog powersettingDialog;
-    public static void openPowerSettingDialog(Context context, SeuicGlobalRfidHandler rfidHandler) {
+    public static void openPowerSettingDialog(Context context, SeuicGlobalRfidHandler rfidHandler ) {
         if (powersettingDialog != null) {
             powersettingDialog.dismiss();
         }
-
         powersettingDialog = new Dialog(context);
         powersettingDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         powersettingDialog.setCancelable(false);
@@ -663,16 +662,34 @@ public class AssetUtils {
             }
         });
 
-        if (SharedPreferencesManager.getPower(context)==30) {
+//        if (SharedPreferencesManager.getPower(context)==30) {
+//            tip.setTextColor(context.getResources().getColor(R.color.green));
+//            tip.setText("Current  RF Power : HIGH");
+//            img.setImageDrawable(context.getResources().getDrawable(R.drawable.success));
+//        } else if (SharedPreferencesManager.getPower(context)==20){
+//            tip.setTextColor(context.getResources().getColor(R.color.boh));
+//            tip.setText("Current  RF Power : MEDIUM");
+//            img.setImageDrawable(context.getResources().getDrawable(R.drawable.success));
+//        }
+//        else if (SharedPreferencesManager.getPower(context)==10){
+//            tip.setTextColor(context.getResources().getColor(R.color.red));
+//            tip.setText("Current  RF Power : LOW");
+//            img.setImageDrawable(context.getResources().getDrawable(R.drawable.success));
+//        }else{
+//            tip.setTextColor(context.getResources().getColor(R.color.red));
+//            tip.setText("Current  RF Power : LOW");
+//            img.setImageDrawable(context.getResources().getDrawable(R.drawable.success));
+//        }
+        if (SharedPreferencesManager.getPowerText(context).equalsIgnoreCase("HIGH")){
             tip.setTextColor(context.getResources().getColor(R.color.green));
             tip.setText("Current  RF Power : HIGH");
             img.setImageDrawable(context.getResources().getDrawable(R.drawable.success));
-        } else if (SharedPreferencesManager.getPower(context)==20){
+        } else if (SharedPreferencesManager.getPowerText(context).equalsIgnoreCase("MEDIUM")){
             tip.setTextColor(context.getResources().getColor(R.color.boh));
             tip.setText("Current  RF Power : MEDIUM");
             img.setImageDrawable(context.getResources().getDrawable(R.drawable.success));
         }
-        else if (SharedPreferencesManager.getPower(context)==10){
+        else if (SharedPreferencesManager.getPowerText(context).equalsIgnoreCase("LOW")){
             tip.setTextColor(context.getResources().getColor(R.color.red));
             tip.setText("Current  RF Power : LOW");
             img.setImageDrawable(context.getResources().getDrawable(R.drawable.success));
@@ -694,24 +711,27 @@ public class AssetUtils {
             @Override
             public void onClick(View v) {
                 powersettingDialog.dismiss();
-                SharedPreferencesManager.setPower(context, 30);
-                setAntennaPower(context,String.valueOf(30),rfidHandler);
+                SharedPreferencesManager.setPowerText(context, "HIGH");
+                //SharedPreferencesManager.setPower(context, 30);
+                //setAntennaPower(context,String.valueOf(30),rfidHandler);
             }
         });
         btnMedium.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 powersettingDialog.dismiss();
-                SharedPreferencesManager.setPower(context, 20);
-                setAntennaPower(context,String.valueOf(20),rfidHandler);
+                SharedPreferencesManager.setPowerText(context, "MEDIUM");
+                //SharedPreferencesManager.setPower(context, 20);
+                //setAntennaPower(context,String.valueOf(20),rfidHandler);
             }
         });
         btnLow.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 powersettingDialog.dismiss();
-                SharedPreferencesManager.setPower(context, 10);
-                setAntennaPower(context,String.valueOf(10),rfidHandler);
+                SharedPreferencesManager.setPowerText(context, "LOW");
+                //SharedPreferencesManager.setPower(context, 10);
+                //setAntennaPower(context,String.valueOf(10),rfidHandler);
             }
         });
         // successdialog.getWindow().getAttributes().windowAnimations = R.style.FadeInOutAnimation;
@@ -721,6 +741,17 @@ public class AssetUtils {
                 powersettingDialog.show();
                 // startCountDownTimer();
             }
+        }
+        try {
+            // mDevice.setParameters(UHFService.PARAMETER_CLEAR_EPCLIST, 1);
+            boolean rv =  rfidHandler.mDevice.setPower(30);
+            if (!rv) {
+                Toast.makeText(context, context.getResources().getString(R.string.set_power_fail), Toast.LENGTH_SHORT).show();
+            } else {
+                //Toast.makeText(context, context.getResources().getString(R.string.set_power_ok), Toast.LENGTH_SHORT).show();
+            }
+        }catch (Exception e){
+
         }
     }
 

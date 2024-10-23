@@ -47,7 +47,7 @@ public class DashboardActivity extends AppCompatActivity {
         binding = DataBindingUtil.setContentView(this, R.layout.activity_dashboard);
         setTitle("Dashboard");
         getSupportActionBar().hide();
-
+        SharedPreferencesManager.setPowerText(context, "LOW");
         //binding.btnKitOut.setVisibility(View.GONE);
         db = new DatabaseHandler(context);
         cd = new ConnectionDetector(context);
