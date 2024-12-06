@@ -7,6 +7,7 @@ import android.app.Dialog;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
@@ -15,6 +16,8 @@ import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -46,6 +49,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.TimeUnit;
@@ -55,7 +59,7 @@ import okhttp3.OkHttpClient;
 public class KitDataUploadActivity extends BaseUhfActivity implements AdapterView.OnItemSelectedListener {
     List<String> epcList;
 
-    Dialog customConfirmationDialog;
+    Dialog customConfirmationDialog, customConfirmationDialog1;
     private ActivityKitDataUploadBinding binding;
     private Context context = this;
     private ConnectionDetector cd;
@@ -73,6 +77,8 @@ public class KitDataUploadActivity extends BaseUhfActivity implements AdapterVie
     public ArrayList<HashMap<String, String>> tagList = new ArrayList<>();
     HashMap<String, String> hashMap = new HashMap<>();
     private int TagCount = 0;
+    //List<String> missedTags = new ArrayList<>();
+    Map<String, String> missedTags = new HashMap<>();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -107,7 +113,8 @@ public class KitDataUploadActivity extends BaseUhfActivity implements AdapterVie
             @Override
             public void onClick(View v) {
                 if (tagList.size() > 0) {
-                    showCustomConfirmationDialog("Are you sure you want to upload", "UPLOAD");
+                    //showCustomConfirmationDialog("Are you sure you want to upload", "UPLOAD");
+                    getTagStatus();
                 }
 //                int invMaster = db.getInventoryMasterCount();
 //                if (invMaster > 0) {
@@ -453,6 +460,9 @@ public class KitDataUploadActivity extends BaseUhfActivity implements AdapterVie
         if (arrayList != null) {
             arrayList.clear();
         }
+        if(missedTags != null){
+            missedTags.clear();
+        }
 
         binding.list.setVisibility(View.GONE);
         allow_trigger_to_press = true;
@@ -488,6 +498,9 @@ public class KitDataUploadActivity extends BaseUhfActivity implements AdapterVie
         //binding.list.setVisibility(View.GONE);
         binding.textTotalScanned.setText("Total Kit ID's : 0");
         binding.spLocation.setSelection(0);
+        if(missedTags != null){
+            missedTags.clear();
+        }
     }
 
     /**
@@ -620,7 +633,7 @@ public class KitDataUploadActivity extends BaseUhfActivity implements AdapterVie
 //                                if (status.equalsIgnoreCase("true")) {
 //                                    allow_trigger_to_press = false;
 //
-//                                    JSONObject masterObj = result.getJSONObject("data");
+    //                                    JSONObject masterObj = result.getJSONObject("data");
 //
 //                                    JSONArray dataArray = masterObj.getJSONArray("Data");
 //                                    if (dataArray.length() == epcList.size()) {
@@ -843,6 +856,160 @@ public class KitDataUploadActivity extends BaseUhfActivity implements AdapterVie
 //        }
 //
 //    }
+public void showCustomConfirmationDialogSpecial(Map<String, String> missedTags) {
+    if (customConfirmationDialog1 != null) {
+        customConfirmationDialog1.dismiss();
+    }
+    customConfirmationDialog1 = new Dialog(context);
+    if (customConfirmationDialog1 != null) {
+        customConfirmationDialog1.dismiss();
+    }
+    customConfirmationDialog1.requestWindowFeature(Window.FEATURE_NO_TITLE);
+    customConfirmationDialog1.setCancelable(false);
+    customConfirmationDialog1.setContentView(R.layout.custom_alert_dialog_layout2);
+    TextView text = (TextView) customConfirmationDialog1.findViewById(R.id.text_dialog);
+    TextView textHeader = (TextView) customConfirmationDialog1.findViewById(R.id.textView);
+    ImageButton errorImage = (ImageButton) customConfirmationDialog1.findViewById(R.id.image_dialog);
+    errorImage.setVisibility(View.VISIBLE);
+    textHeader.setVisibility(View.VISIBLE);
+    errorImage.setOnClickListener(new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            customConfirmationDialog1.dismiss();
+        }
+    });
+    // Join the missedTags list into a comma-separated string
+    String missedTagsString = TextUtils.join(", ", missedTags.values());
+    // Create a custom message
+    String message = "The entries of the following kits were missed: \n\n" + missedTagsString +"\n\n Do you want to proceed?";
+    text.setText(message);
+    Button dialogButton = (Button) customConfirmationDialog1.findViewById(R.id.btn_dialog);
+    Button dialogButtonCancel = (Button) customConfirmationDialog1.findViewById(R.id.btn_dialog_cancel);
+    dialogButton.setText("YES");
+    dialogButtonCancel.setText("NO");
+    dialogButton.setOnClickListener(new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+                allow_trigger_to_press = false;
+                uploadInventoryToServer();
+            customConfirmationDialog1.dismiss();
+        }
+    });
+    dialogButtonCancel.setOnClickListener(new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            if(!missedTags.isEmpty()){
+                // Remove missed tags from epcList
+                for (String missedTag : missedTags.keySet()) {
+                    epcList.remove(missedTag); // Removes the tag if it exists
+                }
+            }
+            adapter.notifyDataSetChanged();
+            allow_trigger_to_press = false;
+            uploadInventoryToServer();
+            customConfirmationDialog1.dismiss();
+        }
+    });
+    customConfirmationDialog1.show();
+}
+    private void getTagStatus() {
+        if (cd.isConnectingToInternet()) {
+            if (epcList.size()> 0) {
+                try {
+                    JSONObject jSONObject = null;
+                    jSONObject = new JSONObject();
+                    jSONObject.put(APIConstants.K_INVENTORY_COUNT, "" + TagCount);
+                    jSONObject.put(APIConstants.K_DEVICE_ID, SharedPreferencesManager.getDeviceId(context));
+                    jSONObject.put(APIConstants.K_TRANS_LOCATION_ID, db.getAutoclaveLocationIdByLocationName(selected_source_item));
+                    jSONObject.put(APIConstants.K_INVENTORY_DATE_TIME, AssetUtils.getUTCSystemDateTimeInFormatt());
+                    JSONArray jSONArray = new JSONArray();
+                    for (int i = 0; i < epcList.size(); i++) {
+                        String epc = epcList.get(i);
+                        if (!db.getAssetNameByTagId(epc).equalsIgnoreCase(AppConstants.UNKNOWN_ASSET)) {
+                            jSONArray.put(epc);
+                        }
+                    }
+                    jSONObject.put(APIConstants.K_DATA, jSONArray);
+                    collectTagStatusAndDoValidation(jSONObject, APIConstants.M_GET_MISSED_ASSETS,"Please wait...\n" + "Getting Asset Status");
 
+                } catch (JSONException e) {
+
+                }
+            }
+        } else {
+            AssetUtils.showCommonBottomSheetErrorDialog(context, getResources().getString(R.string.internet_error));
+        }
+    }
+
+    public void collectTagStatusAndDoValidation(JSONObject request, String METHOD_NAME, String progress_message) {
+        if(missedTags != null){
+            missedTags.clear();
+        }
+        Log.e("MissedTagReq", request.toString());
+        OkHttpClient okHttpClient = new OkHttpClient().newBuilder()
+                .connectTimeout(APIConstants.API_TIMEOUT, TimeUnit.SECONDS)
+                .readTimeout(APIConstants.API_TIMEOUT, TimeUnit.SECONDS)
+                .writeTimeout(APIConstants.API_TIMEOUT, TimeUnit.SECONDS)
+                .build();
+        showProgress(context, progress_message);
+        AndroidNetworking.post(SharedPreferencesManager.getHostUrl(context) + METHOD_NAME).addJSONObjectBody(request)
+                .setTag("test")
+                .setPriority(Priority.LOW)
+                .setOkHttpClient(okHttpClient) // passing a custom okHttpClient
+                .build().getAsJSONObject(new JSONObjectRequestListener() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        Log.e("MissedTagResponse", response.toString());
+                        if (response != null) {
+                            try {
+                                hideProgressDialog();
+                                if (response.has(APIConstants.K_STATUS)) {
+                                    if (response.getBoolean(APIConstants.K_STATUS)) {
+                                        if (response.has(APIConstants.K_DATA)) {
+                                            if (response.getJSONArray(APIConstants.K_DATA).length()>0) {
+                                                JSONArray dataArray;
+                                                dataArray = response.getJSONArray(APIConstants.K_DATA);
+                                                for(int i=0; i< dataArray.length(); i++){
+                                                    String missedTag = "";
+                                                    String AssetName = "";
+                                                    JSONObject obj = dataArray.getJSONObject(i);
+                                                    if(obj.has("TagID")){
+                                                        missedTag = obj.getString("TagID");
+                                                    }
+                                                    if(obj.has("AssetteName")){
+                                                        AssetName = obj.getString("AssetteName");
+                                                    }
+                                                    missedTags.put(missedTag, AssetName);
+
+                                                }
+                                                if(!missedTags.isEmpty()){
+                                                    showCustomConfirmationDialogSpecial(missedTags);
+                                                }
+                                            } else{
+                                                showCustomConfirmationDialog("Are you sure you want to upload?", "UPLOAD");
+                                            }
+                                        }
+
+                                    } else {
+                                        String message = response.getString(APIConstants.K_MESSAGE);
+                                        AssetUtils.showCommonBottomSheetErrorDialog(context, message);
+                                    }
+                                }
+                            } catch (JSONException e) {
+                            }
+                        } else {
+                            hideProgressDialog();
+                            // Toast.makeText(context,"Communication Error",Toast.LENGTH_SHORT).show();
+                            AssetUtils.showCommonBottomSheetErrorDialog(context, getResources().getString(R.string.communication_error));
+                        }
+                    }
+
+                    @Override
+                    public void onError(ANError anError) {
+
+                    }
+                });
+        //TODO CALL Without Barcode API
+    }
 
 }

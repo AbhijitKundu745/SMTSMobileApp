@@ -51,7 +51,6 @@ public class DashboardActivity extends AppCompatActivity {
         //binding.btnKitOut.setVisibility(View.GONE);
         db = new DatabaseHandler(context);
         cd = new ConnectionDetector(context);
-
         binding.btnInOut.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
                 showProgress(context, "Processing..");
@@ -106,8 +105,6 @@ public class DashboardActivity extends AppCompatActivity {
 //        // Shutdown executor when the application is closing
 //        Runtime.getRuntime().addShutdownHook(new Thread(() -> executor.shutdown()));
 //    }
-
-
     private void startWorkOrderPollingApiHandler() {
         if (workOrderPollingApiRunnable != null) {
             // Remove any existing callbacks

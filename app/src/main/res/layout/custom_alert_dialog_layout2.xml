@@ -3,61 +3,80 @@
     android:layout_width="match_parent"
     android:background="@color/page_background"
     android:layout_height="wrap_content">
-
-    <ImageView
-        android:layout_width="match_parent"
-        android:layout_height="100dp"
-        android:id="@+id/image_dialog"
-        android:gravity="center"
-        android:visibility="gone"
-        android:src="@drawable/error"
-        android:scaleType="fitCenter" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="TEXTO"
-        android:id="@+id/text_dialog"
-        android:layout_below="@+id/image_dialog"
-        android:layout_marginTop="20dp"
-        android:layout_marginLeft="4dp"
-        android:layout_marginRight="4dp"
-        android:layout_marginBottom="20dp"
-        android:textSize="18sp"
-        android:textColor="#ff000000"
-        android:layout_centerHorizontal="true"
-        android:gravity="center_horizontal" />
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="20dp"
-        android:layout_marginTop="20dp"
-        android:layout_below="@+id/text_dialog"
-        android:gravity="center_vertical|center_horizontal"
-        android:layout_height="wrap_content">
-
-
-
-    <Button
-        android:layout_width="0dp"
-        android:layout_weight=".5"
-        android:layout_height="40dp"
-        android:text="OK"
-        android:layout_marginLeft="15dp"
-        android:layout_marginRight="5dp"
-        android:id="@+id/btn_dialog"
-        android:background="@drawable/round_button_green"
-        android:textColor="#ffffffff" />
-        <Button
-            android:layout_width="0dp"
-            android:layout_weight=".5"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+        <ImageButton
+            android:id="@+id/image_dialog"
+            android:layout_width="40dp"
             android:layout_height="40dp"
-            android:text="Cancel"
-            android:id="@+id/btn_dialog_cancel"
-            android:layout_marginLeft="5dp"
-            android:layout_marginRight="15dp"
-            android:background="@drawable/round_button_red"
-            android:textColor="#ffffffff" />
+            android:layout_alignParentEnd="true"
+            android:gravity="end"
+            android:layout_gravity="end"
+            android:src="@drawable/error"
+            android:visibility="gone" />
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_marginLeft="4dp"
+            android:layout_marginTop="6dp"
+            android:layout_marginRight="4dp"
+            android:layout_marginBottom="20dp"
+            android:gravity="center"
+            android:layout_gravity="center"
+            android:text="WARNING!"
+            android:textColor="@color/red"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:visibility="gone"/>
+        <TextView
+            android:id="@+id/text_dialog"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_marginLeft="4dp"
+            android:layout_marginTop="6dp"
+            android:layout_marginRight="4dp"
+            android:layout_marginBottom="20dp"
+            android:gravity="center_horizontal"
+            android:layout_gravity="center"
+            android:text="TEXTO"
+            android:textColor="#ff000000"
+            android:textSize="18sp" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="20dp"
+            android:layout_marginTop="20dp"
+            android:layout_below="@+id/text_dialog"
+            android:gravity="center_vertical|center_horizontal"
+            android:layout_height="wrap_content">
+            <Button
+                android:layout_width="0dp"
+                android:layout_weight=".5"
+                android:layout_height="40dp"
+                android:text="OK"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="5dp"
+                android:id="@+id/btn_dialog"
+                android:background="@drawable/round_button_green"
+                android:textColor="#ffffffff" />
+            <Button
+                android:layout_width="0dp"
+                android:layout_weight=".5"
+                android:layout_height="40dp"
+                android:text="Cancel"
+                android:id="@+id/btn_dialog_cancel"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="15dp"
+                android:background="@drawable/round_button_red"
+                android:textColor="#ffffffff" />
+        </LinearLayout>
     </LinearLayout>
+
+
 
 </RelativeLayout>
