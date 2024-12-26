@@ -107,8 +107,6 @@ public class KitDataUploadActivity extends BaseUhfActivity implements AdapterVie
         ArrayAdapter aa = new ArrayAdapter(this, android.R.layout.simple_spinner_item, sources);
         aa.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         binding.spLocation.setAdapter(aa);
-        SharedPreferencesManager.setPower(context, 30);
-        SharedPreferencesManager.setPowerText(context, "LOW");
         binding.btnSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -134,7 +132,6 @@ public class KitDataUploadActivity extends BaseUhfActivity implements AdapterVie
             public void onClick(View v) {
                 if (allow_trigger_to_press) {
                     AssetUtils.openPowerSettingDialog(context, rfidHandler);
-                    //openPowerSettingDialog(context);
                 }
             }
         });
@@ -353,6 +350,7 @@ public class KitDataUploadActivity extends BaseUhfActivity implements AdapterVie
     public void onResume() {
         super.onResume();
         rfidHandler.onResume();
+        SharedPreferencesManager.setPower(context, 15);
     }
 
     @Override

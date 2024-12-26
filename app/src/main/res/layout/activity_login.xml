@@ -157,7 +157,7 @@
                 android:layout_marginTop="10dp"
                 android:textColor="@color/white"
                 android:layout_marginBottom="10dp"
-                android:text="Version: 1.5.3" />
+                android:text="Version: 1.5.4" />
         </androidx.appcompat.widget.LinearLayoutCompat>
 
         <androidx.appcompat.widget.AppCompatTextView
