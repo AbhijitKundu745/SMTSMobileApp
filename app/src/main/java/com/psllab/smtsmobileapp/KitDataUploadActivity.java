@@ -7,6 +7,7 @@ import android.app.Dialog;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
@@ -79,6 +80,7 @@ public class KitDataUploadActivity extends BaseUhfActivity implements AdapterVie
     private int TagCount = 0;
     //List<String> missedTags = new ArrayList<>();
     Map<String, String> missedTags = new HashMap<>();
+    private String SCANNED_EPC = "";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -243,14 +245,22 @@ public class KitDataUploadActivity extends BaseUhfActivity implements AdapterVie
                 runOnUiThread(() -> {
                     if (rfifList != null) {
                         if (rfifList.size() > 0) {
+                            int maxRssi = Integer.MIN_VALUE;
+                            String maxRssiEpc = null;
                             for (int i = 0; i < rfifList.size(); i++) {
                                 String epc = rfifList.get(i).getId();
-                                if (epc != null) {
-                                    if (!epc.equalsIgnoreCase("")) {
-                                        if (epc.length() >= 24) {
-                                            epc = epc.substring(0, 24);
-                                            doDataValidations(epc);
-                                            Log.e("EPC", epc);
+                                int rssivalue = rfifList.get(i).rssi;
+                                if (rssivalue > maxRssi) {
+                                    maxRssi = rssivalue;
+                                    maxRssiEpc = epc;
+                                }
+                                if (maxRssiEpc != null) {
+                                    if (!maxRssiEpc.equalsIgnoreCase("")) {
+                                        if (maxRssiEpc.length() >= 24) {
+                                            maxRssiEpc = maxRssiEpc.substring(0, 24);
+                                            SCANNED_EPC = maxRssiEpc;//added
+                                            //doDataValidations(maxRssiEpc);
+                                            Log.e("EPC", maxRssiEpc);
                                         }
                                     }
                                 }
@@ -277,39 +287,68 @@ public class KitDataUploadActivity extends BaseUhfActivity implements AdapterVie
         // TODO Auto-generated method stub
     }
 
-    private void doDataValidations(String epc) {
-        if (!this.epcList.contains(epc)) {
-            if(!db.getAssetNameByTagId(epc).equalsIgnoreCase(AppConstants.UNKNOWN_ASSET)){
-                valid_speed++;
-                epcList.add(epc);
-                hashMap = new HashMap<>();
-                hashMap.put(AppConstants.ASSET_NAME, db.getAssetNameByTagId(epc));
-                tagList.add(hashMap);
-            }
-            binding.textTotalScanned.setText(String.valueOf(epcList.size()));
-            TagCount = epcList.size();
-            adapter.notifyDataSetChanged();
+//    private void doDataValidations(String epc) {
+//        if (!this.epcList.contains(epc)) {
+//            if(!db.getAssetNameByTagId(epc).equalsIgnoreCase(AppConstants.UNKNOWN_ASSET)){
+//                valid_speed++;
+//                epcList.add(epc);
+//                hashMap = new HashMap<>();
+//                hashMap.put(AppConstants.ASSET_NAME, db.getAssetNameByTagId(epc));
+//                tagList.add(hashMap);
+//            }
+//
+//            binding.textTotalScanned.setText(String.valueOf(epcList.size()));
+//            TagCount = epcList.size();
+//            adapter.notifyDataSetChanged();
+//        }
+//        else{
+//            AssetUtils.showCommonBottomSheetErrorDialog(context,"The Kit has already been scanned");
+//        }
+//    }
+private void doDataValidations() {
+    allow_trigger_to_press = true;
+    if (!this.epcList.contains(SCANNED_EPC)) {
+        Log.e("Here1", db.getAssetNameByTagId(SCANNED_EPC));
+        if(!db.getAssetNameByTagId(SCANNED_EPC).equalsIgnoreCase(AppConstants.UNKNOWN_ASSET)){
+            //valid_speed++;
+            epcList.add(SCANNED_EPC);
+            hashMap = new HashMap<>();
+            hashMap.put(AppConstants.ASSET_NAME, db.getAssetNameByTagId(SCANNED_EPC));
+            tagList.add(hashMap);
         }
+        binding.textTotalScanned.setText(String.valueOf(epcList.size()));
+        TagCount = epcList.size();
+        adapter.notifyDataSetChanged();
     }
+    else{
+        AssetUtils.showCommonBottomSheetErrorDialog(context,"The Kit has already been scanned");
+    }
+}
 
     private void takeInventoryAction() {
-        allow_trigger_to_press = true;
-        if (isInventoryOn) {
-            isInventoryOn = false;
-            rfidHandler.stopInventory();
-            //binding.ll.setBackgroundColor(getResources().getColor(R.color.red4));
-            binding.textInventoryIndicator.setBackgroundDrawable(getResources().getDrawable(R.drawable.round_button_red));
-            binding.btnStartStop.setBackgroundDrawable(getResources().getDrawable(R.drawable.round_button_red));
-            binding.btnStartStop.setText("Stop");
-        } else {
-            isInventoryOn = true;
-            rfidHandler.startInventory();
-            //binding.ll.setBackgroundColor(getResources().getColor(R.color.green));
-            binding.textInventoryIndicator.setBackgroundDrawable(getResources().getDrawable(R.drawable.round_button_green));
-            binding.btnStartStop.setBackgroundDrawable(getResources().getDrawable(R.drawable.round_button_green));
-            binding.btnStartStop.setText("Start");
-        }
-
+//        allow_trigger_to_press = true;
+//        if (isInventoryOn) {
+//            isInventoryOn = false;
+//            rfidHandler.stopInventory();
+//            //binding.ll.setBackgroundColor(getResources().getColor(R.color.red4));
+//            binding.textInventoryIndicator.setBackgroundDrawable(getResources().getDrawable(R.drawable.round_button_red));
+//            binding.btnStartStop.setBackgroundDrawable(getResources().getDrawable(R.drawable.round_button_red));
+//            binding.btnStartStop.setText("Stop");
+//        } else {
+//            isInventoryOn = true;
+//            rfidHandler.startInventory();
+//            //binding.ll.setBackgroundColor(getResources().getColor(R.color.green));
+//            binding.textInventoryIndicator.setBackgroundDrawable(getResources().getDrawable(R.drawable.round_button_green));
+//            binding.btnStartStop.setBackgroundDrawable(getResources().getDrawable(R.drawable.round_button_green));
+//            binding.btnStartStop.setText("Start");
+//        }
+        startInventory();
+        new Handler().postDelayed(() -> {
+            hideProgressDialog();
+            allow_trigger_to_press = true;
+            stopInventory();
+            doDataValidations();//added
+        }, 500);
     }
 
 
@@ -1008,6 +1047,33 @@ public void showCustomConfirmationDialogSpecial(Map<String, String> missedTags) 
                     }
                 });
         //TODO CALL Without Barcode API
+    }
+    private void startInventory() {
+        if (allow_trigger_to_press) {
+            allow_trigger_to_press = false;
+            binding.textInventoryIndicator.setBackgroundDrawable(getResources().getDrawable(R.drawable.round_button_green));
+            binding.btnStartStop.setBackgroundDrawable(getResources().getDrawable(R.drawable.round_button_green));
+            binding.btnStartStop.setText("Start");
+            showProgress(context, "Please wait...Scanning Rfid Tag");
+            setFilterandStartInventory();
+        } else {
+            hideProgressDialog();
+        }
+    }
+
+    private void stopInventory() {
+        rfidHandler.stopInventory();
+        allow_trigger_to_press = true;
+        binding.textInventoryIndicator.setBackgroundDrawable(getResources().getDrawable(R.drawable.round_button_red));
+        binding.btnStartStop.setBackgroundDrawable(getResources().getDrawable(R.drawable.round_button_red));
+        binding.btnStartStop.setText("Stop");
+        hideProgressDialog();
+    }
+
+    private void setFilterandStartInventory() {
+        int rfpower = SharedPreferencesManager.getPower(context);
+        rfidHandler.setRFPower(rfpower);
+        rfidHandler.startInventory();
     }
 
 }

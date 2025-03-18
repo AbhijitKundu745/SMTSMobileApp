@@ -785,12 +785,12 @@ public static void openPowerSettingDialog(Context context, SeuicGlobalRfidHandle
         tip.setTextColor(context.getResources().getColor(R.color.green));
         tip.setText("Current  RF Power : HIGH");
         img.setImageDrawable(context.getResources().getDrawable(R.drawable.success));
-    } else if (SharedPreferencesManager.getPower(context)==20){
+    } else if (SharedPreferencesManager.getPower(context)==15){
         tip.setTextColor(context.getResources().getColor(R.color.boh));
         tip.setText("Current  RF Power : MEDIUM");
         img.setImageDrawable(context.getResources().getDrawable(R.drawable.success));
     }
-    else if (SharedPreferencesManager.getPower(context)==15){
+    else if (SharedPreferencesManager.getPower(context)==5){
         tip.setTextColor(context.getResources().getColor(R.color.red));
         tip.setText("Current  RF Power : LOW");
         img.setImageDrawable(context.getResources().getDrawable(R.drawable.success));
