@@ -79,7 +79,7 @@ public class KitDataUploadActivity extends BaseUhfActivity implements AdapterVie
     HashMap<String, String> hashMap = new HashMap<>();
     private int TagCount = 0;
     //List<String> missedTags = new ArrayList<>();
-    Map<String, String> missedTags = new HashMap<>();
+    private Map<String, String> missedTags = new HashMap<>();
     private String SCANNED_EPC = "";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -1043,7 +1043,8 @@ public void showCustomConfirmationDialogSpecial(Map<String, String> missedTags) 
 
                     @Override
                     public void onError(ANError anError) {
-
+                        hideProgressDialog();
+                        AssetUtils.showCommonBottomSheetErrorDialog(context, "Error Code: "+anError.getErrorCode()+"\nError Message: "+ anError.getErrorDetail());
                     }
                 });
         //TODO CALL Without Barcode API

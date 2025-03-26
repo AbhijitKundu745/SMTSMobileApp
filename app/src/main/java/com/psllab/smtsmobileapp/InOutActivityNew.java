@@ -6,11 +6,19 @@ import static com.psllab.smtsmobileapp.helper.AssetUtils.showProgress;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
 
+import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
+import android.graphics.Color;
+import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
+import android.text.Spannable;
+import android.text.SpannableStringBuilder;
+import android.text.TextUtils;
+import android.text.style.ForegroundColorSpan;
+import android.text.style.StyleSpan;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
@@ -25,6 +33,7 @@ import com.androidnetworking.AndroidNetworking;
 import com.androidnetworking.common.Priority;
 import com.androidnetworking.error.ANError;
 import com.androidnetworking.interfaces.JSONObjectRequestListener;
+import com.google.gson.JsonNull;
 import com.psllab.smtsmobileapp.adapters.InOutAdapter;
 import com.psllab.smtsmobileapp.adapters.InventoryAdapter;
 import com.psllab.smtsmobileapp.databases.DatabaseHandler;
@@ -49,6 +58,8 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.TimeUnit;
@@ -75,6 +86,8 @@ public class InOutActivityNew extends BaseUhfActivity implements AdapterView.OnI
     HashMap<String, String> hashMap = new HashMap<>();
     private int TagCount = 0;
     private String SCANNED_EPC = "";
+    private Map<String, Map<String, String>> missedTags = new HashMap<>();
+    private AlertDialog alertDialog;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -107,7 +120,8 @@ public class InOutActivityNew extends BaseUhfActivity implements AdapterView.OnI
             @Override
             public void onClick(View v) {
                 if (tagList.size() > 0) {
-                        showCustomConfirmationDialog("Are you sure you want to upload", "UPLOAD");
+//                        showCustomConfirmationDialog("Are you sure you want to upload", "UPLOAD");
+                    getMissedLocationTagData();
                 }
 
             }
@@ -237,7 +251,6 @@ public class InOutActivityNew extends BaseUhfActivity implements AdapterView.OnI
                                         maxRssiEpc = maxRssiEpc.substring(0, 24);
                                         //doDataValidations(maxRssiEpc);
                                         SCANNED_EPC = maxRssiEpc;//added
-                                        Log.e("EPC", maxRssiEpc);
                                     }
                                 }
                             }
@@ -265,7 +278,6 @@ public class InOutActivityNew extends BaseUhfActivity implements AdapterView.OnI
     private void doDataValidations() {
         allow_trigger_to_press = true;
         if (!this.epcList.contains(SCANNED_EPC)) {
-            Log.e("Here1", db.getAssetNameByTagId(SCANNED_EPC));
             if(!db.getAssetNameByTagId(SCANNED_EPC).equalsIgnoreCase(AppConstants.UNKNOWN_ASSET)){
                 //valid_speed++;
                 epcList.add(SCANNED_EPC);
@@ -555,7 +567,6 @@ public class InOutActivityNew extends BaseUhfActivity implements AdapterView.OnI
                     }
 
                 } else {
-                    Log.e("Connection", "No internet");
                     hideProgressDialog();
                     allow_trigger_to_press = true;
                     AssetUtils.showCommonBottomSheetErrorDialog(context, getResources().getString(R.string.internet_error));
@@ -575,9 +586,6 @@ public class InOutActivityNew extends BaseUhfActivity implements AdapterView.OnI
                 .readTimeout(APIConstants.API_TIMEOUT, TimeUnit.SECONDS)
                 .writeTimeout(APIConstants.API_TIMEOUT, TimeUnit.SECONDS)
                 .build();
-
-        Log.e("UPLOADURL",SharedPreferencesManager.getHostUrl(context)+METHOD_NAME);
-        Log.e("UPLOADREQUEST",dataRequestObject.toString());
         AndroidNetworking.post(SharedPreferencesManager.getHostUrl(context) + METHOD_NAME).addJSONObjectBody(dataRequestObject)
                 .setTag("test")
                 .setPriority(Priority.LOW)
@@ -591,7 +599,6 @@ public class InOutActivityNew extends BaseUhfActivity implements AdapterView.OnI
                         //dataAPIIsInProgress = true;
                         if (result != null) {
                             try {
-                                Log.e("UPLOADRESULT",result.toString());
                                 String status = result.getString(APIConstants.K_STATUS);
                                 String message = result.getString(APIConstants.K_MESSAGE);
 
@@ -622,15 +629,11 @@ public class InOutActivityNew extends BaseUhfActivity implements AdapterView.OnI
                         hideProgressDialog();
                         allow_trigger_to_press = true;
                         //dataAPIIsInProgress = false;
-                        //Log.e("ERROR", anError.getErrorDetail());
                         if (anError.getErrorDetail().equalsIgnoreCase("responseFromServerError")) {
                             AssetUtils.showCommonBottomSheetErrorDialog(context, getResources().getString(R.string.communication_error));
                         } else if (anError.getErrorDetail().equalsIgnoreCase("connectionError")) {
-                            Log.e("Connection1", "No internet");
                             AssetUtils.showCommonBottomSheetErrorDialog(context, getResources().getString(R.string.internet_error));
                         } else {
-                            Log.e("Connection2", "No internet");
-                            Log.e("Error", anError.getErrorDetail());
                             AssetUtils.showCommonBottomSheetErrorDialog(context, getResources().getString(R.string.internet_error));
                         }
                     }
@@ -649,8 +652,6 @@ public class InOutActivityNew extends BaseUhfActivity implements AdapterView.OnI
                 .readTimeout(APIConstants.API_TIMEOUT, TimeUnit.SECONDS)
                 .writeTimeout(APIConstants.API_TIMEOUT, TimeUnit.SECONDS)
                 .build();
-
-        Log.e("URL", SharedPreferencesManager.getHostUrl(context) + METHOD_NAME);
         AndroidNetworking.get(SharedPreferencesManager.getHostUrl(context) + METHOD_NAME)//.addJSONObjectBody(loginRequestObject)
                 .setTag("test")
                 .setPriority(Priority.LOW)
@@ -663,7 +664,6 @@ public class InOutActivityNew extends BaseUhfActivity implements AdapterView.OnI
                         //dataAPIIsInProgress = false;
                         if (result != null) {
                             try {
-                                Log.e("LocationResult", result.toString());
                                 String status = result.getString(APIConstants.K_STATUS);
                                 String message = result.getString(APIConstants.K_MESSAGE);
 
@@ -726,14 +726,11 @@ public class InOutActivityNew extends BaseUhfActivity implements AdapterView.OnI
                         //    getAllLocoMaster(APIConstants.M_GET_ALL_LOCO_MASTER,"Please wait...\nGetting Loco Master");
 
                         hideProgressDialog();
-                        Log.e("ERROR", anError.getErrorDetail());
                         if (anError.getErrorDetail().equalsIgnoreCase("responseFromServerError")) {
                             AssetUtils.showCommonBottomSheetErrorDialog(context, getResources().getString(R.string.communication_error));
                         } else if (anError.getErrorDetail().equalsIgnoreCase("connectionError")) {
-                            Log.e("Connection3", "No internet");
                             AssetUtils.showCommonBottomSheetErrorDialog(context, getResources().getString(R.string.internet_error));
                         } else {
-                            Log.e("Connection4", "No internet");
                             AssetUtils.showCommonBottomSheetErrorDialog(context, getResources().getString(R.string.internet_error));
                         }
                     }
@@ -767,4 +764,166 @@ public class InOutActivityNew extends BaseUhfActivity implements AdapterView.OnI
         rfidHandler.setRFPower(rfpower);
         rfidHandler.startInventory();
     }
+    private void getMissedLocationTagData(){
+        if (cd.isConnectingToInternet()) {
+            if (epcList.size()> 0) {
+                try {
+                    JSONObject jSONObject = new JSONObject();
+                    jSONObject.put(APIConstants.K_READER_ID, "20.0.0.10");
+                    jSONObject.put(APIConstants.K_INVENTORY_COUNT, ""+TagCount);
+                    jSONObject.put(APIConstants.K_DEVICE_ID, SharedPreferencesManager.getDeviceId(context));
+                    jSONObject.put(APIConstants.K_TRANS_LOCATION_ID, db.getLocationIdByLocationName(selected_source_item));
+                    jSONObject.put(APIConstants.K_TOUCH_POINT_ID, 0);
+                    jSONObject.put(APIConstants.K_TOUCH_POINT_TYPE, "M");
+                    jSONObject.put(APIConstants.K_TTRANSACTION_DATE_TIME, AssetUtils.getSystemDateTimeInFormatt());
+                    JSONArray jSONArray = new JSONArray();
+                    for(int i = 0; i < epcList.size(); i++)
+                    {
+                        String epc = epcList.get(i);if (!db.getAssetNameByTagId(epc).equalsIgnoreCase(AppConstants.UNKNOWN_ASSET)) {
+                        jSONArray.put(epc);
+                        }
+                    }
+                    jSONObject.put(APIConstants.K_DATA, jSONArray);
+                    collectTagAndValidate(jSONObject, APIConstants.M_GET_LOCATION_ENTRY,"Please wait...\n" + "Getting Asset Status");
+                } catch (Exception e){
+                    AssetUtils.showCommonBottomSheetErrorDialog(context, e.getMessage());
+                }
+            }
+        }
+        else {
+            AssetUtils.showCommonBottomSheetErrorDialog(context, getResources().getString(R.string.internet_error));
+        }
+    }
+    private void collectTagAndValidate(JSONObject res, String methodName, String progressMsg){
+        if(missedTags != null){
+            missedTags.clear();
+        }
+        OkHttpClient okHttpClient = new OkHttpClient().newBuilder()
+                .connectTimeout(APIConstants.API_TIMEOUT, TimeUnit.SECONDS)
+                .readTimeout(APIConstants.API_TIMEOUT, TimeUnit.SECONDS)
+                .writeTimeout(APIConstants.API_TIMEOUT, TimeUnit.SECONDS)
+                .build();
+        showProgress(context, progressMsg);
+        AndroidNetworking.post(SharedPreferencesManager.getHostUrl(context) + methodName).addJSONObjectBody(res)
+                .setTag("test")
+                .setPriority(Priority.LOW)
+                .setOkHttpClient(okHttpClient) // passing a custom okHttpClient
+                .build().getAsJSONObject(new JSONObjectRequestListener() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try{
+                           hideProgressDialog();
+                           if(response.has(APIConstants.K_STATUS)){
+                               if(response.getBoolean(APIConstants.K_STATUS)){
+                                   if(response.has(APIConstants.K_DATA)){
+                                       Object data = response.get(APIConstants.K_DATA);
+                                       if (data != JSONObject.NULL) {
+                                           if (data instanceof JSONArray) {
+                                               JSONArray dataArray = response.getJSONArray(APIConstants.K_DATA);
+                                               if(dataArray.length()>0) {
+                                                   for (int j = 0; j < dataArray.length(); j++) {
+                                                       String missedTag = "";
+                                                       String assetName = "";
+                                                       String prevLocation = "";
+                                                       JSONObject obj = dataArray.getJSONObject(j);
+                                                       if (obj.has(APIConstants.K_TAG_ID)) {
+                                                           missedTag = obj.getString(APIConstants.K_TAG_ID);
+                                                       }
+                                                       if (obj.has("AssetteName")) {
+                                                           assetName = obj.getString("AssetteName");
+                                                       }
+                                                       if (obj.has("CurrentPresentLocationID")) {
+                                                           prevLocation = obj.getString("CurrentPresentLocationID");
+                                                       }
+                                                       Map<String, String> tagDetails = new HashMap<>();
+                                                       tagDetails.put("AssetName", assetName);
+                                                       tagDetails.put("PreviousLocation", prevLocation);
+                                                       missedTags.put(missedTag, tagDetails);
+                                                   }
+                                                   if (!missedTags.isEmpty()) {
+//                                                      missedTags.clear();
+//                                                      missedTags.putAll(tempMissedTags);
+                                                       showAlertDialog(missedTags);
+                                                   }
+                                               }
+                                               else{
+                                                   showCustomConfirmationDialog("Are you sure you want to upload?", "UPLOAD");
+                                               }
+                                           }
+                                       }
+                                        else{
+                                            showCustomConfirmationDialog("Are you sure you want to upload?", "UPLOAD");
+                                        }
+                                   }
+                               }
+                               else {
+                                   String message = response.getString(APIConstants.K_MESSAGE);
+                                   AssetUtils.showCommonBottomSheetErrorDialog(context, message);
+                               }
+                           }
+                        }
+                        catch (Exception ex){
+                            AssetUtils.showCommonBottomSheetErrorDialog(context, ex.getMessage());
+                        }
+                    }
+
+                    @Override
+                    public void onError(ANError anError) {
+                        hideProgressDialog();
+                        AssetUtils.showCommonBottomSheetErrorDialog(context, "Error Code: "+anError.getErrorCode()+"\nError Message: "+ anError.getErrorDetail());
+                    }
+                });
+    }
+    public void showAlertDialog(Map<String, Map<String, String>> missedTags) {
+        if (alertDialog != null && alertDialog.isShowing()) {
+            return; // Prevent multiple dialogs from opening
+        }
+
+        SpannableStringBuilder messageBuilder  = new SpannableStringBuilder ();
+
+        for (Map.Entry<String, Map<String, String>> entry : missedTags.entrySet()) {
+            Map<String, String> tagDetails = entry.getValue();
+
+            if (tagDetails != null) {
+                String assetName = tagDetails.get("AssetName");
+                String prevLocation = tagDetails.get("PreviousLocation");
+                String prevLocationName = db.getLocationNameByLocationId(prevLocation);
+
+                messageBuilder.append("The Asset ");
+                int start = messageBuilder.length();
+                messageBuilder.append(assetName);
+                int end = messageBuilder.length();
+                messageBuilder.setSpan(new ForegroundColorSpan(Color.BLUE), start, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                messageBuilder.setSpan(new StyleSpan(Typeface.BOLD), start, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                messageBuilder.append(" has not been moved ");
+                start = messageBuilder.length();
+                messageBuilder.append("OUT");
+                end = messageBuilder.length();
+                messageBuilder.setSpan(new ForegroundColorSpan(Color.RED), start, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                messageBuilder.setSpan(new StyleSpan(Typeface.BOLD), start, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                messageBuilder.append(" from location: ");
+                start = messageBuilder.length();
+                messageBuilder.append(prevLocationName);
+                end = messageBuilder.length();
+                messageBuilder.setSpan(new ForegroundColorSpan(Color.RED), start, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                messageBuilder.setSpan(new StyleSpan(Typeface.BOLD), start, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                messageBuilder.append("\n\n");
+            }
+
+        }
+        messageBuilder.append("If you want to save transactions, \nplease do OUT from this location of the assets.");
+
+        TextView textView = new TextView(context);
+        textView.setText(messageBuilder);
+        textView.setPadding(40, 20, 40, 20);
+        textView.setTextSize(16);
+
+        alertDialog =  new AlertDialog.Builder(context)
+                .setTitle("Warning")
+                .setView(textView)
+                .setIcon(R.drawable.warning)
+                .setPositiveButton("OK", (dialog, which) -> dialog.dismiss())
+                .show();
+    }
+
 }

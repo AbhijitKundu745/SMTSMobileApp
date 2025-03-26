@@ -16,6 +16,7 @@ public class APIConstants {
     public static final String M_GET_ROOM_MASTER = "/PDA/GetAllRooms?tenantID=";
     public static final String M_GET_LOST_ASSET_MASTER = "/PDA/GetLostAssets?tenantID=";
     public static final String M_GET_MISSED_ASSETS = "/PDA/EntryMissedAssetData";
+    public static final String M_GET_LOCATION_ENTRY = "/PDA/LocationEntryCheck";
 
     public static final int API_TIMEOUT = 120;
 
